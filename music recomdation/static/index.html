@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Music Recommender</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+      :root{--bg:#0b1220;--card:#071028;--accent:#7c3aed;--accent2:#06b6d4;--muted:#94a3b8}
+      *{box-sizing:border-box}
+      body{font-family:Inter,system-ui,Arial,sans-serif;background:linear-gradient(180deg,#041021 0%, #071428 100%);color:#e6eef8;min-height:100vh}
+      .wrap{max-width:920px;margin:36px auto;padding:20px}
+
+      .hero{display:flex;align-items:center;gap:18px}
+      .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;color:white;box-shadow:0 10px 30px rgba(12,14,30,0.6)}
+      h1{margin:0;font-size:1.6rem}
+      .sub{margin:4px 0 0;color:var(--muted)}
+
+      .search-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:18px;margin-top:18px;box-shadow:0 12px 30px rgba(2,6,23,0.6)}
+      .search-row{display:flex;gap:12px;align-items:center}
+      .input{flex:1;display:flex;gap:12px;align-items:center}
+      input[type="text"]{flex:1;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit;font-size:1rem}
+      .seg{display:flex;background:rgba(255,255,255,0.02);border-radius:10px;padding:4px}
+      .seg button{background:transparent;border:0;color:var(--muted);padding:8px 12px;border-radius:8px;cursor:pointer}
+      .seg button.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:white}
+      .actions{display:flex;gap:8px;align-items:center}
+      .btn{background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:white;padding:10px 14px;border-radius:10px;font-weight:600;cursor:pointer}
+      .small{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 10px;border-radius:8px;color:var(--muted)}
+
+      .chips{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+      .chip{background:rgba(255,255,255,0.02);padding:8px 10px;border-radius:999px;color:var(--muted);cursor:pointer;border:1px solid rgba(255,255,255,0.02)}
+
+      .results{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+      .card{display:flex;gap:12px;align-items:center;padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.02)}
+      .art{width:64px;height:64px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700}
+      .info strong{display:block;font-size:1rem}
+      .meta{color:var(--muted);font-size:0.9rem;margin-top:6px}
+
+      .status{margin-left:6px;color:var(--muted);font-size:0.95rem}
+
+      .fade{transition:all .18s ease}
+      .card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(2,6,23,0.6)}
+
+      @media (max-width:720px){.search-row{flex-direction:column;align-items:stretch}.actions{width:100%;justify-content:space-between}}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="logo">MR</div>
+        <div>
+          <h1>Music Recommender</h1>
+          <p class="lead">Type a lyric, artist or mood and click Recommend.</p>
+        </div>
+      </header>
+
+      <div class="search-card fade">
+        <div class="search-row">
+          <div class="input">
+            <input id="query" type="text" placeholder="Type lyrics, mood, artist, or a short phrase" aria-label="Search" />
+            <div class="seg" role="tablist" aria-label="Model">
+              <button id="m-content" class="active">Content</button>
+              <button id="m-cluster">Cluster</button>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="rec" class="btn">Recommend</button>
+            <button id="clear" class="small">Clear</button>
+            <div id="status" class="status"></div>
+          </div>
+        </div>
+
+        <div class="chips" aria-hidden="false">
+          <div class="chip">love</div>
+          <div class="chip">party</div>
+          <div class="chip">calm piano</div>
+          <div class="chip">sad</div>
+          <div class="chip">upbeat</div>
+        </div>
+
+        <div id="results" class="results"></div>
+      </div>
+    </div>
+
+    <script>
+      const recBtn = document.getElementById('rec');
+      const clearBtn = document.getElementById('clear');
+      const status = document.getElementById('status');
+      const results = document.getElementById('results');
+      const qInput = document.getElementById('query');
+      const mContent = document.getElementById('m-content');
+      const mCluster = document.getElementById('m-cluster');
+      let model = 'content';
+
+      function setModel(m){ model = m; mContent.classList.toggle('active', m==='content'); mCluster.classList.toggle('active', m==='cluster'); }
+      mContent.addEventListener('click', ()=>setModel('content'));
+      mCluster.addEventListener('click', ()=>setModel('cluster'));
+
+      document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click', ()=>{ qInput.value=c.textContent; doSearch(); }));
+
+      clearBtn.addEventListener('click', ()=>{ qInput.value=''; results.innerHTML=''; status.textContent=''; });
+
+      recBtn.addEventListener('click', doSearch);
+      qInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); doSearch(); } });
+
+      async function doSearch(){
+        const query = qInput.value.trim();
+        if(!query){ status.textContent='Please enter text to search.'; return; }
+        status.textContent='Searching...';
+        recBtn.disabled = true;
+        try{
+          const res = await fetch('/recommend', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model,query,n:12})});
+          const data = await res.json();
+          results.innerHTML='';
+          if(data.error){ status.textContent=data.error; return; }
+          status.textContent = `${data.results.length} results`;
+          data.results.forEach(s=>{
+            const el = document.createElement('div'); el.className='card fade';
+            const art = document.createElement('div'); art.className='art'; art.textContent = (s.Name||'')[0]||'?';
+            const info = document.createElement('div'); info.className='info';
+            info.innerHTML = `<strong>${escapeHtml(s.Name)}</strong><div class='meta'>${escapeHtml(s.Artist)} • ${escapeHtml(s.Album)} — popularity ${s.Popularity}</div>`;
+            el.appendChild(art); el.appendChild(info); results.appendChild(el);
+          });
+        }catch(e){ status.textContent='Request failed'; }
+        finally{ recBtn.disabled=false; }
+      }
+
+      function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"})[c]) }
+    </script>
+  </body>
+</html>

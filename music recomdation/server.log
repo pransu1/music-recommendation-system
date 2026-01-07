@@ -1,0 +1,41 @@
+ * Serving Flask app 'app'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.125.161.186:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 548-898-962
+127.0.0.1 - - [03/Jan/2026 20:24:25] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:24:25] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+127.0.0.1 - - [03/Jan/2026 20:24:34] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:24:43] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:24:45] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:24:45] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:24:51] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:25:16] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:26:03] "[36mGET / HTTP/1.1[0m" 304 -
+127.0.0.1 - - [03/Jan/2026 20:26:03] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+127.0.0.1 - - [03/Jan/2026 20:26:13] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:27:49] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:27:50] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+127.0.0.1 - - [03/Jan/2026 20:28:56] "[36mGET / HTTP/1.1[0m" 304 -
+127.0.0.1 - - [03/Jan/2026 20:28:56] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+127.0.0.1 - - [03/Jan/2026 20:28:59] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:29:00] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:29:01] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:29:02] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:29:02] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:29:03] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:29:13] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:29:15] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:29:16] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:29:16] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:29:22] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:29:23] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:29:24] "POST /recommend HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jan/2026 20:29:39] "POST /recommend HTTP/1.1" 200 -
+/opt/homebrew/Cellar/python@3.10/3.10.19_1/Frameworks/Python.framework/Versions/3.10/lib/python3.10/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
